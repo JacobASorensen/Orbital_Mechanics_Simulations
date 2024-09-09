@@ -14,8 +14,8 @@ The n-body ODE python code is mine, a lot of the other stuff is scavenged.
 Specifically I want to try to simulate a grid of different starting positions within lagrange points, and see where the most stable position is
 
 ## Some fun graphs
-![5-body animation](/5_body_anim2.gif)
+![5-body animation](animations/5_body_anim2.gif)
 
-![Jupiter and Earth](/Jupiter_Earth.gif)
+![Jupiter and Earth](animations/Jupiter_Earth.gif)
 
 
