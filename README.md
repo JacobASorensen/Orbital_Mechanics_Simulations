@@ -18,4 +18,7 @@ Specifically I want to try to simulate a grid of different starting positions wi
 
 ![Jupiter and Earth](animations/Jupiter_Earth.gif)
 
+![Inner Solar System](animations/Inner_Solar_System.gif)
+
+
 
