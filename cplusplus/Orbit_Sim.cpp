@@ -186,9 +186,9 @@ std::tuple<std::vector<double>, std::vector<std::vector<double>>> RKF_4_5(
         std::vector<double> temp(y.size());
         const double A[7] = {
             0.0,0.0,2/9,1/3,3/4,1,5/6
-        }
+        };
 
-        const double B[5][7] = {
+        const double B[7][6] = {
             {0.0,0.0,0.0,0.0,0.0,0.0},
             {0.0,0.0,0.0,0.0,0.0,0.0},
             {0.0,2/9,0.0,0.0,0.0,0.0},
@@ -251,19 +251,26 @@ std::tuple<std::vector<double>, std::vector<std::vector<double>>> RKF_4_5(
 
         const double CH[7] = {
             0.0,47/450,0,12/25,32/225,1/30,6/25
-        }
+        };
         const double CT[7] = {
             1/150,0,-3/100,16/75,1/20,-6/25
-        }
+        };
         // Update y and t
         for (size_t i = 0; i < y.size(); ++i) {
             y[i] += CH[1] * k1[i] + CH[2] * k2[i] + CH[3] * k3[i] + CH[4] * k4[i] + CH[5] * k5[i] + CH[6] * k6[i];
         }
 
-        truncation_error = abs(CT[1] * k1[i] + CT[2] * k2[i] + CT[3] * k3[i] + CT[4] * k4[i] + CT[5] * k5[i] + CT[6] * k6[i]);
+        std::vector<double> t_vec(y.size());
+        double truncation_error = 0.0;
+        double trunc_temp = 0.0;
+        for (size_t i = 0; i < y.size(); ++i) {
+            trunc_temp = CT[1] * k1[i] + CT[2] * k2[i] + CT[3] * k3[i] + CT[4] * k4[i] + CT[5] * k5[i] + CT[6] * k6[i];
+            truncation_error += trunc_temp*trunc_temp;
+        }
+        truncation_error = pow(truncation_error,0.5);
 
         t += h;
-        h = 0.9*h*pow(acceptable_error/truncation_error,1/5)
+        h = 0.9*h*pow(acceptable_error/truncation_error,1/5);
 
         if(truncation_error > acceptable_error) {
             record_previous_data = false;
