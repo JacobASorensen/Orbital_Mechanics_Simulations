@@ -164,13 +164,15 @@ std::tuple<std::vector<double>, std::vector<std::vector<double>>> RKF_4_5(
     double t_end,
     double h,
     double G = DEFAULT_GRAVITY_CONSTANT,
-    double acceptable_error = DEFAULT_ERROR_MARGIN
+    double acceptable_error = DEFAULT_ERROR_MARGIN,
+    double upper_bound_fraction = 1.0,
+    double lower_bound_fraction = 1.0
 
 ) {
     // Variables to store time and y values
     std::vector<double> t_values;
     std::vector<std::vector<double>> y_values;
-
+    double original_step_size = h;
     double t = t0;
     std::vector<double> y = y0;
     bool record_previous_data = true;
@@ -271,10 +273,20 @@ std::tuple<std::vector<double>, std::vector<std::vector<double>>> RKF_4_5(
 
         t += h;
         h = 0.9*h*pow(acceptable_error/truncation_error,1/5);
-
+        
         if(truncation_error > acceptable_error) {
             record_previous_data = false;
         }
+
+        if(h < lower_bound_fraction*original_step_size) {
+            h = lower_bound_fraction*original_step_size;
+            record_previous_data = true;
+        } else if(h > upper_bound_fraction*original_step_size) {
+            h = upper_bound_fraction*original_step_size;
+            record_previous_data = true;
+        }
+
+        
     }
 
     return std::make_tuple(t_values, y_values);
