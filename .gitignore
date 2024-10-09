@@ -4,3 +4,4 @@
 
 # Ignore shared object files
 *.so
+*.pyc
