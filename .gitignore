@@ -1,0 +1,6 @@
+# Ignore C++ object files
+*.o
+*.obj
+
+# Ignore shared object files
+*.so
