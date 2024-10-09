@@ -176,7 +176,59 @@ std::tuple<std::vector<double>, std::vector<std::vector<double>>> RKF_4_5(
     double t = t0;
     std::vector<double> y = y0;
     bool record_previous_data = true;
+    double old_h = h;
+    const double A[7] = {
+        0.0,0.0,2.0/9.0,1.0/3.0,3.0/4.0,1.0,5.0/6.0
+    };
 
+    const double B[7][6] = {
+        {0.0,0.0,0.0,0.0,0.0,0.0},
+        {0.0,0.0,0.0,0.0,0.0,0.0},
+        {0.0,2.0/9.0,0.0,0.0,0.0,0.0},
+        {0.0,1.0/12.0,1.0/4.0,0.0,0.0,0.0},
+        {0.0,69.0/128.0,-243.0/128.0,135.0/64.0,0.0,0.0},
+        {0.0,-17.0/12.0,27.0/4.0,-27.0/5.0,16.0/15.0,0.0},
+        {0.0,65.0/432.0,-5.0/16.0,13.0/16.0,4.0/27.0,5.0/144.0}
+    };
+    const double CH[7] = {
+        0.0,
+        47.0/450.0,
+        0.0,
+        12.0/25.0,
+        32.0/225.0,
+        1.0/30.0,
+        6.0/25.0
+    };
+    const double CT[7] = {
+        1.0/150.0,
+        0.0,
+        -3.0/100.0,
+        16.0/75.0,
+        1.0/20.0,
+        -6.0/25.0
+    };
+    // for (size_t i = 0; i < 7; ++i) {
+    //     cout << "A[" << i << "] is " << A[i] << " ";
+    // }
+    // cout  << endl;
+    // for (size_t i = 0; i < 7; ++i) {
+    //     for(size_t x = 0; x < 6; x++) {
+    //         if(B[i][x] != 0.0) {
+    //             cout << "B[" << i << "][" << x << "] is " << B[i][x] << " ";
+    //         }
+    //     }
+    //     cout << endl;
+    // }
+    // cout << endl;
+    // cout  << endl;
+    // for (size_t i = 0; i < 7; ++i) {
+    //     cout << "CH[" << i << "] is " << CH[i] << " ";
+    // }
+    // cout  << endl;
+    // for (size_t i = 0; i < 7; ++i) {
+    //     cout << "CT[" << i << "] is " << CT[i] << " ";
+    // }
+    // cout  << endl;
     // Runge-Kutta Loop
     while (t <= t_end) {
         if(record_previous_data) {
@@ -186,19 +238,7 @@ std::tuple<std::vector<double>, std::vector<std::vector<double>>> RKF_4_5(
         record_previous_data = true;
         std::vector<double> k1(y.size()), k2(y.size()), k3(y.size()), k4(y.size()), k5(y.size()), k6(y.size());
         std::vector<double> temp(y.size());
-        const double A[7] = {
-            0.0,0.0,2/9,1/3,3/4,1,5/6
-        };
-
-        const double B[7][6] = {
-            {0.0,0.0,0.0,0.0,0.0,0.0},
-            {0.0,0.0,0.0,0.0,0.0,0.0},
-            {0.0,2/9,0.0,0.0,0.0,0.0},
-            {0.0,1/12,1/4,0.0,0.0,0.0},
-            {0.0,69/128,-243/128,135/64,0.0,0.0},
-            {0.0,-17/12,27/4,-27/5,16/15,0.0},
-            {0.0,65/432,-5/16,13/16,4/27,5/144}
-        };
+        
 
         // k1
         std::vector<double> f_t_y = n_body_ODE_system(t, y,masses,G);
@@ -250,16 +290,44 @@ std::tuple<std::vector<double>, std::vector<std::vector<double>>> RKF_4_5(
         for (size_t i = 0; i < y.size(); ++i) {
             k6[i] = h * f_t_y[i];
         }
+        // cout << "k1 :";
+        // for (size_t i = 0; i < k1.size(); ++i) {
+        //     cout << k1[i] << " ";
+        // }
+        // cout << endl;
+        // cout << "k2 :";
+        // for (size_t i = 0; i < k1.size(); ++i) {
+        //     cout << k2[i] << " ";
+        // }
+        // cout << endl;
+        // cout << "k3 :";
+        // for (size_t i = 0; i < k1.size(); ++i) {
+        //     cout << k3[i] << " ";
+        // }
+        // cout << endl;
+        // cout << "k4 :";
+        // for (size_t i = 0; i < k1.size(); ++i) {
+        //     cout << k4[i] << " ";
+        // }
+        // cout << endl;
+        // cout << "k5 :";
+        // for (size_t i = 0; i < k1.size(); ++i) {
+        //     cout << k5[i] << " ";
+        // }
+        // cout << endl;
+        // cout << "k6 :";
+        // for (size_t i = 0; i < k1.size(); ++i) {
+        //     cout << k6[i] << " ";
+        // }
+        // cout << endl;
 
-        const double CH[7] = {
-            0.0,47/450,0,12/25,32/225,1/30,6/25
-        };
-        const double CT[7] = {
-            1/150,0,-3/100,16/75,1/20,-6/25
-        };
+        
+        
         // Update y and t
         for (size_t i = 0; i < y.size(); ++i) {
             y[i] += CH[1] * k1[i] + CH[2] * k2[i] + CH[3] * k3[i] + CH[4] * k4[i] + CH[5] * k5[i] + CH[6] * k6[i];
+            // cout << "we are adding: " << CH[1] * k1[i] + CH[2] * k2[i] + CH[3] * k3[i] + CH[4] * k4[i] + CH[5] * k5[i] + CH[6] * k6[i];
+            // cout << " for time " << t << " to y " << i << " which is: " << y[i] << endl;
         }
 
         std::vector<double> t_vec(y.size());
@@ -271,12 +339,11 @@ std::tuple<std::vector<double>, std::vector<std::vector<double>>> RKF_4_5(
         }
         truncation_error = pow(truncation_error,0.5);
 
-        t += h;
-        h = 0.9*h*pow(acceptable_error/truncation_error,1/5);
-        
+        old_h = h;
         if(truncation_error > acceptable_error) {
             record_previous_data = false;
         }
+        h = 0.9*h*pow(acceptable_error/truncation_error,1/5);
 
         if(h < lower_bound_fraction*original_step_size) {
             h = lower_bound_fraction*original_step_size;
@@ -285,7 +352,9 @@ std::tuple<std::vector<double>, std::vector<std::vector<double>>> RKF_4_5(
             h = upper_bound_fraction*original_step_size;
             record_previous_data = true;
         }
-
+        if(record_previous_data) {
+            t += old_h;
+        }
         
     }
 
