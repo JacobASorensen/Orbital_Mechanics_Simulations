@@ -20,5 +20,41 @@ Specifically I want to try to simulate a grid of different starting positions wi
 
 ![Inner Solar System](animations/Inner_Solar_System.gif)
 
+## Features to add
+
+### mass data from JPL Horizons 
+Pull from JPL Horizons rather than using hardcoded values
 
 
+### Graph Focus function
+which sets the center and optionally a target object for graphing translated and rotational reference frames
+
+#### Another function to add bodies
+I would like to be able to add small satellites given orbital ephemerides with reference to the target body
+
+#### Preventing satellites from affecting large planetary bodies
+If I wanted to add 50 satellites with slightly different orbital parameters, this would add unnecessary computation steps to the simulation due to their inconsequential mass. Therefore I want to add a feature which removes their force effects on other bodies
+
+### Error Correction From JPL Horizon data
+It would be nice to correct the simulation for named bodies at key times based off of JPL Horizons data
+
+#### Error analysis compared to JPL Horizons baseline
+It would be nice to estimate the error over time of this simulator using JPL Horizons as a baseline
+
+### some sort of patched conics implementation
+Given a focus it would be cool to try out some patched conics
+
+### 3d or other ways of displaying calculated simulation data
+
+
+## Runge Kutte Solvers
+
+I grabbed these from wikipedia in order to implement my RKF4(5) solver
+
+![alt text](images/RKF4.png)
+
+![alt text](images/RKF45.png)
+
+![alt text](images/functions.png)
+
+![alt text](images/RK45_Coefficients.png)
