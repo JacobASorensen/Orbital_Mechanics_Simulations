@@ -67,6 +67,7 @@ class NBodySim:
         self.AU_TO_KM = 1.496e8
         self.AU_DAY_TO_KM_S = 1731.46
         self.GRAVITY_CONSTANT = 6.67430e-20
+        self.IsReferenceFrame = False
         # Set epoch to today's date if not provided
         if epoch is None:
             today = datetime.now().strftime('%Y-%m-%d')
@@ -158,8 +159,59 @@ class NBodySim:
         """Allow the user to update the epoch if desired."""
         self.epoch = epoch
 
+    def set_focus(self,focus = '',target = '',rotational = True):
+        """Sets focus of the graph for graphing.
+        The default is an inertial reference frame with the sun at the center.
+        Setting a target will make sure to include a target body in the graph.
+        Rotational as true will display a rotating coordinate frame with focus at the center
+        and target collinear on the x axis"""
+        if focus != '':
+            self.IsReferenceFrame = True
+        else:
+            self.IsReferenceFrame = False
+        
+        if focus in self.names:
+            focus_index = self.names.index(focus)
+        else:
+            print(f"{focus} is not in the list")
+        
+        if target in self.names:
+            target_index = self.names.index(target)
+        else:
+            print(f"{target} is not in the list")
+
+        self.transformed_simvals = np.array(self.simulation_data[1])
+
+        current = int(len(self.transformed_simvals[0])/2)
+
+        # We need the position arrays of the focus and target
+        # print("focus index:",focus_index)
+        focus_x = self.transformed_simvals[:,current + 3*focus_index]
+        # print("focus x vals:\n",focus_x)
+        focus_y = self.transformed_simvals[:,current + 3*focus_index+1]
+        focus_z = self.transformed_simvals[:,current + 3*focus_index+2]
+
+        for x in self.names:
+            # print("before:\n",self.transformed_simvals[:,current])
+            self.transformed_simvals[:,current] -= focus_x
+            # print("after:\n",self.transformed_simvals[:,current])
+            self.transformed_simvals[:,current+1] -= focus_y
+            self.transformed_simvals[:,current+2] -= focus_z
+            current += 3
+        
+        if target != '':
+            # we need to create the rotation vector
+            target_x = self.transformed_simvals[:,target_index]
+            target_y = self.transformed_simvals[:,target_index+1]
+            target_z = self.transformed_simvals[:,target_index+2]
+
+
     def Basic_Graphic(self):
-        y_values = np.array(self.simulation_data[1])
+        if self.IsReferenceFrame:
+            y_values = self.transformed_simvals
+        else:
+            y_values = np.array(self.simulation_data[1])
+        
         # Static Plot
         # plt.clf()
         # size = len(self.masses)
