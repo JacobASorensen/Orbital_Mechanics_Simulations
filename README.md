@@ -5,7 +5,7 @@ Specifically I am interested in learning more about Lagrange points, and how sat
 I also want to see what types of maneuevers are required to enter and stay within a lagrange point. (How are there asteroids in Earth-Sun L4 and L5?)
 ### I want to learn and subsequently improve my ability to interface C++ with Python
 The simulation code is written in C++, and the main interface is written in python.
-I had never used PyBind before now, which was a cool learning experience.
+I had never before used PyBind. Learning how to use it was a cool learning experience.
 The speed of C++ mixed with the ease of use and data processing prowess of python!
 
 ### I want to see what sort of information I can glean
