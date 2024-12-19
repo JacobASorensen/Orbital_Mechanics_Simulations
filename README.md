@@ -1,5 +1,14 @@
 # Orbital Mechanics Simulations
+## Intro
+
+During one of the first few lectures in this class we hardcoded a 3-body problem in python. I decided to generalize the code to N-bodies since I wanted to look at simulations with more than just 3 bodies (Also, ever since my first comp-sci class I dislike manually coding what can be generalized).
+
+Since my personal laptop is rather slow I thought it would be good to try to convert the simulation code to C++. I had ChatGPT convert my N-Body python ODE code, and the RKF4 solver our professor gave us into C++. With Pybind I was amazed at how easy it was to run compiled C++ as a python function.
+
+The 'lectures' and 'hw' directories contain my notes and homework for this class, while the 'cplusplus' directory contains the n-body code along with helpers.
+
 ## Project Purpose
+
 ### I want to better understand n-body dynamics for n > 2
 Specifically I am interested in learning more about Lagrange points, and how satellites will behave in the different types of lagrange points.
 I also want to see what types of maneuevers are required to enter and stay within a lagrange point. (How are there asteroids in Earth-Sun L4 and L5?)
