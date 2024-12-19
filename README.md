@@ -25,6 +25,11 @@ NBodySim python class which:
 
 ![Inner Solar System](animations/Inner_Solar_System.gif)
 
+- Translation feature for graphs to see what the orbits look like from a target body (Rotating reference frame option planned to be added to this function)
+
+![Earth Mars and Jupiter translated to Earth](animations/Earth_Focus.gif)
+
+
 ## Features to add
 
 ### - mass data from JPL Horizons 
