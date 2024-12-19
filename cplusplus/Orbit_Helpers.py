@@ -169,6 +169,7 @@ class NBodySim:
             self.IsReferenceFrame = True
         else:
             self.IsReferenceFrame = False
+            return
         
         if focus in self.names:
             focus_index = self.names.index(focus)
@@ -185,16 +186,11 @@ class NBodySim:
         current = int(len(self.transformed_simvals[0])/2)
 
         # We need the position arrays of the focus and target
-        # print("focus index:",focus_index)
-        focus_x = self.transformed_simvals[:,current + 3*focus_index]
-        # print("focus x vals:\n",focus_x)
-        focus_y = self.transformed_simvals[:,current + 3*focus_index+1]
-        focus_z = self.transformed_simvals[:,current + 3*focus_index+2]
-
+        focus_x = np.copy(self.transformed_simvals[:,current + 3*focus_index])
+        focus_y = np.copy(self.transformed_simvals[:,current + 3*focus_index+1])
+        focus_z = np.copy(self.transformed_simvals[:,current + 3*focus_index+2])
         for x in self.names:
-            # print("before:\n",self.transformed_simvals[:,current])
             self.transformed_simvals[:,current] -= focus_x
-            # print("after:\n",self.transformed_simvals[:,current])
             self.transformed_simvals[:,current+1] -= focus_y
             self.transformed_simvals[:,current+2] -= focus_z
             current += 3
@@ -205,12 +201,14 @@ class NBodySim:
             target_y = self.transformed_simvals[:,target_index+1]
             target_z = self.transformed_simvals[:,target_index+2]
 
+    def Get_Graphing_Data(self):
+        if self.IsReferenceFrame:
+            return self.transformed_simvals
+        else:
+            return np.array(self.simulation_data[1])
 
     def Basic_Graphic(self):
-        if self.IsReferenceFrame:
-            y_values = self.transformed_simvals
-        else:
-            y_values = np.array(self.simulation_data[1])
+        y_values = self.Get_Graphing_Data()
         
         # Static Plot
         # plt.clf()
@@ -237,7 +235,7 @@ class NBodySim:
         plt.show()
     
     def Three_Dim_Graphic(self):
-        y_values = np.array(self.simulation_data[1])
+        y_values = self.Get_Graphing_Data()
         # Static Plot
         # plt.clf()
         # size = len(self.masses)
@@ -271,7 +269,7 @@ class NBodySim:
     def Animated_Graph(self,seconds = 8,lagtime = 0,name = ""):
         fig, ax = plt.subplots()
         size = len(self.names)
-        y_values = np.array(self.simulation_data[1])
+        y_values = self.Get_Graphing_Data()
 
         current = int(len(y_values[0])/2)
         print(len(y_values))
