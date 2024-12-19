@@ -11,8 +11,15 @@ The speed of C++ mixed with the ease of use and data processing prowess of pytho
 ### I want to see what sort of information I can glean
 Specifically I want to try to simulate a grid of different starting positions within lagrange points, and see where the most stable position is
 
-## Some fun graphs
+## Features
+
+N-Body simulator in C++ bound to python with pybind. 
+
 ![5-body animation](animations/5_body_anim2.gif)
+
+NBodySim python class which:
+- simplifies the interface between the N-body simulator and JPL Horizons API calls (using astroquery)
+- provides graphing methods to easily display simulation results (using matplotlib)
 
 ![Jupiter and Earth](animations/Jupiter_Earth.gif)
 
@@ -21,7 +28,7 @@ Specifically I want to try to simulate a grid of different starting positions wi
 ## Features to add
 
 ### - mass data from JPL Horizons 
-Pull from JPL Horizons rather than using hardcoded values
+Pull mass data from JPL Horizons rather than using hardcoded values
 
 
 ### - Graph Focus function
