@@ -37,7 +37,7 @@ Pull mass data from JPL Horizons rather than using hardcoded values
 
 
 ### - Graph Focus function
-which sets the center and optionally a target object for graphing translated and rotational reference frames
+Add target object functionality in order to graph rotating reference frames
 
 #### -- A function to add satellites
 I would like to be able to add small satellites given orbital ephemerides with reference to the target body
